@@ -2,9 +2,8 @@
 require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const connectDB = require("./config/db");
-const signUp = require("../../authentication/signup");
-const login = require("../../authentication/login");
+const connectDB = require("./src/config/db");
+const { signUp, login } = require("./src/controllers/authControllers.js");
 
 
 const app = express();

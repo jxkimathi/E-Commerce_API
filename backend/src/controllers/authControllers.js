@@ -1,9 +1,9 @@
-// Handle login/signup
+// Handle login/signup for users
 
 require("dotenv").config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/userModel');
+const userModel = require("../models/userModel");
 
 
 const login = async (req, res) => {
@@ -18,18 +18,10 @@ const login = async (req, res) => {
       });
     }
 
-    // Find user using the email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid credentials'
-      });
-    }
-
-    // Verify password through comparison
+    // Find user using the email and check whether passwords match
+    const user = await userModel.findOne({ email });
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!user || !isMatch) {
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
