@@ -1,4 +1,4 @@
-// Set up a Database connection
+// MongoDB connection configuration
 require('dotenv').config()
 const mongoose = require('mongoose');
 

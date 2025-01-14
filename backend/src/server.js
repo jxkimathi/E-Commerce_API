@@ -3,8 +3,8 @@ require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
-const signUp = require("./authentication/signup");
-const login = require("./authentication/login");
+const signUp = require("../../authentication/signup");
+const login = require("../../authentication/login");
 
 
 const app = express();
@@ -27,6 +27,7 @@ app.post('/signup', signUp);
 
 // Login a user
 app.post('/login', login);
+
 
 // Start the server
 app.listen(port, () => {

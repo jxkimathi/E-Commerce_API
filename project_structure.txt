@@ -1,0 +1,45 @@
+E-Commerce API Project Structure
+
+/src
+  /controllers
+    - authControllers.js
+    - productControllers.js
+    - orderControllers.js
+    - cartControllers.js
+
+  /models
+    - userModel.js
+    - productModel.js
+    - orderModel.js
+    - cartModel.js
+
+  /routes
+    - auth.js
+    - product.js
+    - order.js
+    - cart.js
+
+  /middleware
+    - auth.js
+    - admin.js
+    - validation.js
+
+  /services
+    - stripe.js
+
+  /config
+    - bd.js
+
+  /tests
+    - auth.test.js
+    - product.test.js
+    - order.test.js
+
+/docs
+  - API_documentation.md
+  - setup.md
+
+package.json
+.env
+.gitignore
+README.md
