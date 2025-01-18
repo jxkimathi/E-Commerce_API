@@ -2,16 +2,23 @@
 require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const connectDB = require("./src/config/db");
-const { signUp, login } = require("./src/controllers/authControllers.js");
+const userRoutes = require("./src/routes/auth");
 
 
 const app = express();
 const port = process.env.PORT || 5000;
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:5000'],
+  credentials: true,
+  optionSuccessStatus: 200
+};
 
 // Parse incoming requests with JSON payloads
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cors(corsOptions));
 
 // Set up a Database connection
 connectDB();
@@ -21,12 +28,14 @@ app.get('/home', (req, res) => {
   res.status(200).json("You are welcome!");
 })
 
-// Register a new user
-app.post('/signup', signUp);
+// User Routes
+app.use('/api/auth/', userRoutes);
 
-// Login a user
-app.post('/login', login);
+// Cart Routes
 
+// Order Routes
+
+// Product Routes
 
 // Start the server
 app.listen(port, () => {
