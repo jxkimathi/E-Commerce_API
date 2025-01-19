@@ -4,22 +4,19 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
 const authenticate = async (req, res) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
-  if (!token) {
-    return res.status(401).json({ message: 'Not token, authorization denied!' });
-  }
-  const secretKey = process.env.JWT_SECRET;
-
   try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (!token) {
+      return res.status(401).json({ message: 'Not token, authorization denied!' });
+    }
+    const secretKey = process.env.JWT_SECRET;
+
     // Verify token and decode the payload
     const decoded = jwt.verify(token, secretKey);
 
-    // Get user email from the payload
-    const userEmail = decoded.email;
-
-    // Find user by email in the database
-    const user = await userModel.findOne({ email: userEmail });
+    // Find user by id
+    const user = await userModel.findbyId(decoded.id);
 
     if (!user) {
       return res.status(401).json({ error: "User does not exist!" });
@@ -30,7 +27,8 @@ const authenticate = async (req, res) => {
     next();
 
   } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
+    console.log(`Auth Error: ${error}`);
+    return res.status(401).json({ error: "Please Authenticate!" });
   }
 };
 
