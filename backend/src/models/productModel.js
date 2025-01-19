@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema(
     },
 
     stock: {
-      type: Boolean,
+      type: Number,
       required: [true, 'Please provide a product stock'],
       min: [0, 'Stock cannot be less than 0']
     }
