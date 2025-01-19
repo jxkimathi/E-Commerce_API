@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    fullname: {
+    name: {
       type: String,
       required: [true, 'Please provide a name']
     },
@@ -11,12 +11,15 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, 'Please provide an email'],
-      unique: true
+      unique: true,
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email']
     },
 
     password: {
       type: String,
-      required: [true, 'Please provide a password']
+      required: [true, 'Please provide a password'],
+      select: false,
+      minlength: 8
     },
     
     role: {
@@ -26,6 +29,15 @@ const userSchema = new mongoose.Schema(
     }
   }
 );
+
+// Encrypt password using bcrypt
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 const userModel = mongoose.model('User', userSchema);
 
