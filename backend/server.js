@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectDB = require("./src/config/db");
 const userRoutes = require("./src/routes/auth");
+const productRoutes = require("./src/routes/product");
 
 
 const app = express();
@@ -36,6 +37,7 @@ app.use('/api/auth/', userRoutes);
 // Order Routes
 
 // Product Routes
+app.use('/api/products/', productRoutes);
 
 // Start the server
 app.listen(port, () => {
