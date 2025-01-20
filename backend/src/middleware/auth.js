@@ -3,9 +3,17 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
-const authenticate = async (req, res) => {
+const authenticate = async (req, res, next) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const authHeader = req.header('Authorization');
+  
+    if (!authHeader) {
+      return res.status(401).json({ success: false, message: "Authorization header required!" });
+    }
+
+    const token =  authHeader.startsWith('Bearer ')
+      ? authHeader.slice(7)
+      : authHeader;
 
     if (!token) {
       return res.status(401).json({ message: 'Not token, authorization denied!' });
@@ -16,7 +24,7 @@ const authenticate = async (req, res) => {
     const decoded = jwt.verify(token, secretKey);
 
     // Find user by id
-    const user = await userModel.findbyId(decoded.id);
+    const user = await userModel.findById(decoded.id);
 
     if (!user) {
       return res.status(401).json({ error: "User does not exist!" });
@@ -24,6 +32,7 @@ const authenticate = async (req, res) => {
 
     // Attach user to request object
     req.user = user;
+    res.status(201).json({ success: true, message: "User authenticated!" });
     next();
 
   } catch (error) {
