@@ -16,9 +16,15 @@ const login = async (req, res) => {
     }
 
     // Find user using the email and check whether passwords match
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email }).select('+password');
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+    
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!user || !isMatch) {
+
+    if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
@@ -78,4 +84,24 @@ const signUp = async (req, res) => {
   }
 };
 
-module.exports = { login, signUp };
+const registerAdmin = async (req, res) => {
+  try{
+    const { name, email, password } = req.body;
+
+    const user = await userModel.create({ name, email, password, role: "admin" });
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    return res.status(201).json({ success: true, token, user: { name: user.name, email: user.email, role: user.role }, message: "Admin created succesfully!" });
+
+  } catch (error) {
+    console.error("Admin registration error:", error);
+    return res.status(500).json({ success: false, message: "Internal server error during admin registration!" });
+  }
+}
+
+module.exports = { login, signUp, registerAdmin };
