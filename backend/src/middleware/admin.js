@@ -1,24 +1,24 @@
 // Admin role verification
 const userModel = require("../models/userModel");
 
-const isAdmin = (req, res, next) => {
-  try{
-    if (req.userModel && req.userModel.role === 'admin') {
-      next();
-    } else {
-      res.status(401).json(
-        {
-          success: false,
-          message: "Not authorized as admin!"
-        }
-      );
+const isAdmin = async (req, res, next) => {
+  try {
+    // Check if user exists and is authenticated
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: "Authentication required" });
     }
+
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: "Not authorized as admin" });
+    }
+
+    // User is admin, proceed
+    next();
+
   } catch (error) {
-    return res.status(500)(
-      {
-        success: false,
-        message: "Internal server error in admin verification!"
-      });
+    console.error('Admin verification error:', error);
+    return res.status(500).json({ success: false, message: "Internal server error in admin verification" });
   }
 };
 
