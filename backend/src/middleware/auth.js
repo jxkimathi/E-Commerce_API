@@ -32,7 +32,7 @@ const authenticate = async (req, res, next) => {
 
     // Attach user to request object
     req.user = user;
-    res.status(201).json({ success: true, message: "User authenticated!" });
+    console.log("User Authenticated!")
     next();
 
   } catch (error) {
