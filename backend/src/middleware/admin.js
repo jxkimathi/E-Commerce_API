@@ -14,6 +14,7 @@ const isAdmin = async (req, res, next) => {
     }
 
     // User is admin, proceed
+    console.log("Admin verified!")
     next();
 
   } catch (error) {
