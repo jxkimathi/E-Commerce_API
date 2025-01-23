@@ -5,10 +5,12 @@ const mongoose = require('mongoose');
 // Connecting to MongoDB
 const connectDB = async () => {
   try {
+    // Check if MONGOBD_URI exists
     if (!process.env.MONGODB_URI) {
       throw new Error("MONGODB_URI is not defined!");
     }
 
+    // Connect to the MongoDB Database
     const conn = await mongoose.connect(process.env.MONGODB_URI);
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);

@@ -59,6 +59,7 @@ const updateProduct = async (req, res) => {
       return res.status(400).json({ success: false, message: "No update data provided" });
     }
 
+    // Update the product and display the new data
     const product = await productModel.findByIdAndUpdate(id, updatedData,
       { new: true, runValidators: true }
     );
