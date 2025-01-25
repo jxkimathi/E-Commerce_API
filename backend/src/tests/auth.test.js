@@ -98,4 +98,22 @@ describe('Authentication Routes', () => {
       expect(res.statusCode).toBe(200);
     });
   });
+
+  describe('POST /register-admin', () => {
+    it('should create a new admin and return token and role', async () => {
+      const res = await request(server)
+        .post('/register-admin')
+        .send({
+          email: 'test@test.com',
+          password: 'password123',
+          name: 'Test User'
+        });
+
+      expect(res.statusCode).toBe(201);
+      expect(res.body).toHaveProperty('token');
+      expect(res.body.role).toHaveProperty('admin');
+      expect(res.body).toHaveProperty('user');
+      expect(res.body.user.email).toBe('test@test.com');
+    })
+  });
 });
