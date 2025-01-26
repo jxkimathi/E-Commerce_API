@@ -111,7 +111,7 @@ describe('Authentication Routes', () => {
 
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty('token');
-      expect(res.body.role).toHaveProperty('admin');
+      expect(res.body.role).toBe('admin');
       expect(res.body).toHaveProperty('user');
       expect(res.body.user.email).toBe('test@test.com');
     })
